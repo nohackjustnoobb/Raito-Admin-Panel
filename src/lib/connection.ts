@@ -158,7 +158,7 @@ class Connection {
     let parsedBody = body;
     let parsedHeaders = headers;
 
-    if (parsedBody && !(parsedBody instanceof String)) {
+    if (parsedBody && !(typeof parsedBody === "string")) {
       parsedBody = JSON.stringify(parsedBody);
       parsedHeaders["Content-Type"] = "application/json";
     }
@@ -190,7 +190,7 @@ class Connection {
     let parsedBody = body;
     let parsedHeaders = headers;
 
-    if (parsedBody && !(parsedBody instanceof String)) {
+    if (parsedBody && !(typeof parsedBody === "string")) {
       parsedBody = JSON.stringify(parsedBody);
       parsedHeaders["Content-Type"] = "application/json";
     }

@@ -3,29 +3,29 @@
   import { mdiCog, mdiMagnify, mdiPlus } from "@mdi/js";
   import { _ } from "svelte-i18n";
   import { Circle } from "svelte-loading-spinners";
+  import { getContext, onDestroy } from "svelte";
 
   import AppIcon from "../components/AppIcon.svelte";
   import { connected } from "../lib/connection";
-  import { getContext, onDestroy } from "svelte";
   import SetConnection from "./SetConnection.svelte";
   import Stackable from "./Stackable.svelte";
   import ConnectionStatus from "./ConnectionStatus.svelte";
   import { categories, list, manga, Manga, Status } from "../lib/manga";
   import { convertRemToPixels, wheelToScrollHorizontally } from "../lib/utils";
   import Button from "../components/Button.svelte";
-  import Image from "../components/Image.svelte";
   import CreateOrUpdateManga from "./CreateOrUpdateManga.svelte";
-  import FullScreenLoader from "./FullScreenLoader.svelte";
-  import Details from "./Details.svelte";
+  import MangasList from "../components/MangasList.svelte";
+  import Search from "./Search.svelte";
+  import Settings from "./Settings.svelte";
 
-  let selectedCategory = "All";
-  let selectedStatus = Status.Any;
-  let isLoading = false;
-  let reached = false;
+  let selectedCategory: string = "All";
+  let selectedStatus: Status = Status.Any;
+  let isLoading: boolean = false;
+  let isReached: boolean = false;
   let mangas: Array<Manga> = [];
   let storedPage: { [id: string]: number } = {};
 
-  const { push, pop } = getContext("stack") as any;
+  const { push } = getContext("stack") as any;
   const status = ["any", "onGoing", "ended"];
 
   // update mangas if manga or list is changed
@@ -71,13 +71,13 @@
     mangas = mangasValue;
 
     // check if the end is reached
-    reached = false;
+    isReached = false;
     const keys = Object.keys(listMap);
     if (keys.length !== 0) {
       const lastIndex = Number(
         keys.toSorted((a, b) => Number(b[0]) - Number(a[0]))[0]
       );
-      if (!listMap[lastIndex].length) reached = true;
+      if (!listMap[lastIndex].length) isReached = true;
     }
   }
 
@@ -96,6 +96,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y-interactive-supports-focus -->
 <Stackable {zIndex}>
   <div class="container">
     <div class="menuBar">
@@ -116,17 +117,13 @@
         </div>
       </div>
       <div class="rightItems">
-        <span
-          role="button"
-          tabindex="0"
-          on:click={() => push(CreateOrUpdateManga)}
-        >
+        <span on:click={() => push(CreateOrUpdateManga)}>
           <SvgIcon type="mdi" path={mdiPlus} size={convertRemToPixels(2.25)} />
         </span>
-        <span>
+        <span on:click={() => push(Search)}>
           <SvgIcon type="mdi" path={mdiMagnify} size={convertRemToPixels(2)} />
         </span>
-        <span>
+        <span on:click={() => push(Settings)}>
           <SvgIcon type="mdi" path={mdiCog} size={convertRemToPixels(2)} />
         </span>
       </div>
@@ -167,30 +164,7 @@
         </div>
       </div>
       <div class="mangas">
-        <ul>
-          {#each mangas as manga (manga.id)}
-            <li
-              on:click={async () => {
-                // Get the Details of the manga
-                push(FullScreenLoader);
-                let details;
-                try {
-                  details = await manga.toDetails();
-                } catch (e) {}
-                pop();
-
-                if (details) push(Details, { manga: details });
-              }}
-            >
-              {#if manga.isEnded}
-                <span>{$_("ended")}</span>
-              {/if}
-              <Image src={manga.thumbnail} />
-              <p>{manga.title}</p>
-              <b>{$_("updatedTo")} {manga.latest || $_("none")}</b>
-            </li>
-          {/each}
-        </ul>
+        <MangasList {mangas} />
         {#if isLoading}
           <div class="loader">
             <Circle color="var(--color-chapters-text)" unit="rem" size="3" />
@@ -199,7 +173,7 @@
           <div class="noMatching">
             <h3>{$_("noMatchingManga")}</h3>
           </div>
-        {:else if !reached}
+        {:else if !isReached}
           <div class="loadMore">
             <Button
               on:click={() => {
@@ -228,7 +202,6 @@
 <style lang="scss">
   .container {
     padding: 1rem;
-
     padding-top: max(1rem, env(safe-area-inset-top));
     height: calc(100% - 3rem - max(1rem, env(safe-area-inset-top)));
   }
@@ -238,6 +211,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    z-index: 1;
 
     .leftItems {
       height: 100%;
@@ -338,62 +313,6 @@
 
     &::-webkit-scrollbar {
       display: none;
-    }
-
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(calc(10rem), 1fr));
-      column-gap: 1rem;
-      row-gap: 1rem;
-
-      li {
-        position: relative;
-        cursor: pointer;
-
-        span {
-          position: absolute;
-          top: 0;
-          left: 0;
-          background-color: #ff0055aa;
-          color: white;
-          font-weight: bold;
-          font-size: 1rem;
-          padding: 0.125rem;
-          padding-left: 1rem;
-          padding-right: 1rem;
-          backdrop-filter: blur(10px);
-          border-radius: 0.5rem 0 0.5rem 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 1.5rem;
-          margin-right: 0.5rem;
-          user-select: all;
-        }
-
-        p {
-          margin: 0;
-          padding: 0;
-          margin-top: 0.5rem;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-
-        b {
-          display: block;
-          margin: 0;
-          padding: 0;
-          opacity: 0.3;
-          font-size: 0.75rem;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-      }
     }
 
     .loader,

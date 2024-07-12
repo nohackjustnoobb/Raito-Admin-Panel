@@ -34,3 +34,5 @@ declare namespace svelteHTML {
       | object
     );
 }
+
+const PKG: any;

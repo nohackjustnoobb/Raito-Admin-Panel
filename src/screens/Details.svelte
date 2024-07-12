@@ -263,7 +263,6 @@
   .container {
     width: calc(100% - 2rem);
     height: 100%;
-
     padding-left: 1rem;
     padding-right: 1rem;
     display: flex;
@@ -366,6 +365,7 @@
 
         span {
           opacity: 0.8;
+          user-select: all;
         }
       }
     }
@@ -379,6 +379,7 @@
 
     span {
       opacity: 0.8;
+      user-select: all;
     }
   }
 

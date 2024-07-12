@@ -10,6 +10,7 @@
   export let hideClear: boolean = false;
   export let rows: number = 1;
   export let paddingHorizontal: string = "1rem";
+  export let focused: boolean = false;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -31,7 +32,13 @@
   {#if rows > 1}
     <textarea bind:value on:* {rows} {...$$restProps} />
   {:else}
-    <input bind:value on:* {...$$restProps} />
+    <input
+      bind:value
+      on:focus={() => (focused = true)}
+      on:blur={() => setTimeout(() => (focused = false), 100)}
+      on:*
+      {...$$restProps}
+    />
   {/if}
 
   {#if rows <= 1}

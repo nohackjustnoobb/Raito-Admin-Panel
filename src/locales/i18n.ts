@@ -1,4 +1,4 @@
-import { addMessages, getLocaleFromQueryString, init } from "svelte-i18n";
+import { addMessages, init } from "svelte-i18n";
 
 import en from "./en.json";
 import zh from "./zh.json";
@@ -8,5 +8,5 @@ addMessages("zh", zh);
 
 init({
   fallbackLocale: "en",
-  initialLocale: getLocaleFromQueryString("lang"),
+  initialLocale: localStorage.getItem("lang"),
 });

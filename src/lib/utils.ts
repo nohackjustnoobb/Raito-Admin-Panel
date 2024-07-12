@@ -1,6 +1,10 @@
-// TODO User Overrides
-function setDarkMode(dark: boolean | undefined) {
-  window.document.body.classList.toggle("dark-mode", dark);
+function setDarkMode() {
+  let isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  const settings = localStorage.getItem("darkTheme");
+  if (settings && settings !== "0") isDarkMode = settings === "1";
+
+  window.document.body.classList.toggle("dark-mode", isDarkMode);
 }
 
 function wheelToScrollHorizontally(parentTagName: string) {
@@ -33,4 +37,19 @@ function sleep(duration: number): Promise<void> {
   return new Promise((res) => setTimeout(res, duration));
 }
 
-export { convertRemToPixels, setDarkMode, sleep, wheelToScrollHorizontally };
+function throttle(mainFunction: () => void, delay: number) {
+  let timerFlag: NodeJS.Timeout | null = null;
+
+  return () => {
+    if (timerFlag !== null) clearTimeout(timerFlag);
+    timerFlag = setTimeout(() => mainFunction(), delay);
+  };
+}
+
+export {
+  convertRemToPixels,
+  setDarkMode,
+  sleep,
+  throttle,
+  wheelToScrollHorizontally,
+};

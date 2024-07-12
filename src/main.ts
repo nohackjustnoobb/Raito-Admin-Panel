@@ -6,10 +6,10 @@ import { setDarkMode } from "./lib/utils";
 import * as _ from "./locales/i18n";
 
 // Setup the theme settings
-setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
+setDarkMode();
 window
   .matchMedia("(prefers-color-scheme: dark)")
-  .addEventListener("change", ({ matches }) => setDarkMode(matches));
+  .addEventListener("change", setDarkMode);
 
 // Main entry point
 const app = new App({

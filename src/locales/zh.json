@@ -74,5 +74,15 @@
     "failedToDeleteTheImage": "刪除圖像失敗",
     "noContent": "無內容",
     "failedToUploadTheImages": "上傳圖像失敗",
-    "failedToEditTheChapter": "編輯章節失敗"
+    "failedToEditTheChapter": "編輯章節失敗",
+    "keywords": "關鍵字",
+    "generalSettings": "一般設定",
+    "version": "版本",
+    "serverVersion": "伺服器版本",
+    "clientVersion": "客戶端版本",
+    "language": "語言",
+    "darkTheme": "深色模式",
+    "auto": "自動",
+    "dark": "深色",
+    "light": "淺色"
 }

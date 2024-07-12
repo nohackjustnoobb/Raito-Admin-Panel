@@ -74,5 +74,15 @@
     "failedToDeleteTheImage": "Failed to delete the image.",
     "noContent": "No Content",
     "failedToUploadTheImages": "Failed to upload the images.",
-    "failedToEditTheChapter": "Failed to edit the chapter."
+    "failedToEditTheChapter": "Failed to edit the chapter.",
+    "keywords": "Keywords",
+    "generalSettings": "General Settings",
+    "version": "Version",
+    "serverVersion": "Server Version",
+    "clientVersion": "Client Version",
+    "language": "Language",
+    "darkTheme": "Dark Theme",
+    "auto": "Auto",
+    "dark": "Dark",
+    "light": "Light"
 }

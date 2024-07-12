@@ -127,6 +127,29 @@ class Manga {
     return true;
   }
 
+  static async getSuggestions(keywords: string): Promise<Array<string>> {
+    if (!get(connected) || !keywords) return [];
+
+    const result = await connection.get("suggestion", {
+      keyword: keywords,
+    });
+    if (!result.ok) return [];
+
+    return await result.json();
+  }
+
+  static async search(keywords: string, page: number): Promise<Array<Manga>> {
+    if (!get(connected) || !keywords) return [];
+
+    const result = await connection.get("search", {
+      keyword: keywords,
+      page: page.toString(),
+    });
+    if (!result.ok) return [];
+
+    return (await result.json()).map((v: any) => new Manga(v));
+  }
+
   async toDetails(): Promise<DetailsManga> {
     if (!get(connected)) throw "Not connected";
 
