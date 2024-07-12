@@ -1,6 +1,6 @@
 # Raito Admin Panel
 
-This is the front-end of the admin panel. If you enabled the CMS feature on the [Raito-Server](https://github.com/nohackjustnoobb/Raito-Server.git)., you need this to access the interface.
+This is the front-end of the admin panel. If you enabled the CMS feature on the [Raito-Server](https://github.com/nohackjustnoobb/Raito-Server.git), you need this to access the interface.
 
 ## Quick start
 
