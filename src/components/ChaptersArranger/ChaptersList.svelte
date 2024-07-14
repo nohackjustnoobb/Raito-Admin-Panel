@@ -188,9 +188,8 @@
     list-style-type: none;
     padding: 0;
     margin: 0;
-    margin-bottom: max(1rem, env(safe-area-inset-bottom));
     gap: 0.5rem;
-    flex: 1;
+    width: 100%;
 
     li {
       display: flex;
@@ -204,6 +203,7 @@
       border-radius: 0.5rem;
       font-size: 1rem;
       text-align: center;
+      width: calc(100% - 0.75rem);
       height: 1.5rem;
 
       span {
@@ -218,6 +218,8 @@
       p {
         margin: 0;
         padding: 0;
+        padding-left: 1rem;
+        padding-right: 1rem;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

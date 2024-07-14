@@ -105,7 +105,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <Swipeable {zIndex}>
   <div class="container" style:flex-direction={isVertical ? "column" : "row"}>
-    <div class="left" style:max-width={isVertical ? "" : "400px"}>
+    <div class="left" style:width={isVertical ? "" : "400px"}>
       <TopBar>
         <div slot="right" class="actions">
           <span on:click={() => push(CreateOrUpdateManga, { manga })}>
@@ -284,14 +284,15 @@
 
   .right,
   .left {
-    flex: 1;
     display: flex;
     flex-direction: column;
     position: relative;
   }
 
   .right {
+    width: calc(100% - 400px - 2rem);
     .content {
+      flex: 1;
       overflow: hidden;
     }
   }

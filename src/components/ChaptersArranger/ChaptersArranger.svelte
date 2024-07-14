@@ -82,6 +82,7 @@
 <style lang="scss">
   .container {
     height: 100%;
+    width: 100%;
   }
 
   .controller {
@@ -101,22 +102,23 @@
 
   .content {
     display: flex;
+    overflow-x: hidden;
+    overflow-y: scroll;
     gap: 1rem;
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    width: 100%;
+    padding-bottom: env(safe-area-inset-bottom);
     height: calc(
-      100% - max(1rem, env(safe-area-inset-bottom)) - max(
-          0.5rem,
-          env(safe-area-inset-top)
-        ) - 2rem
+      100% - env(safe-area-inset-bottom) - max(1rem, env(safe-area-inset-top)) -
+        2.5rem
     );
 
     &::-webkit-scrollbar {
       display: none;
     }
-  }
 
-  .content > div {
-    flex: 1;
+    div {
+      width: calc(50% - 0.5rem);
+    }
   }
 
   .disabled {
