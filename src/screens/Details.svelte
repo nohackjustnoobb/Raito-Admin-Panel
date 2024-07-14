@@ -287,6 +287,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    height: 100%;
   }
 
   .right {
@@ -384,6 +385,11 @@
       opacity: 0.8;
       user-select: all;
       white-space: pre-line;
+      overflow-x: scroll;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 

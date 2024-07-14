@@ -61,6 +61,7 @@
       v.getBoundingClientRect().top + scrollTop,
       v.getBoundingClientRect().bottom + scrollTop,
     ]);
+    positions.pop();
   }
 
   function onDragStartWrapper(chapter: Chapter) {
@@ -171,6 +172,8 @@
       </span>
     </li>
   {/each}
+
+  <li />
 </ul>
 
 <svelte:document
@@ -209,6 +212,12 @@
       span {
         display: flex;
         cursor: pointer;
+      }
+
+      &:last-child {
+        height: env(safe-area-inset-bottom);
+        padding: 0;
+        background: transparent;
       }
 
       .draggable {

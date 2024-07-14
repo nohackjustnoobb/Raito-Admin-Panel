@@ -89,7 +89,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: max(1rem, env(safe-area-inset-top));
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   span {
@@ -106,11 +106,7 @@
     overflow-y: scroll;
     gap: 1rem;
     width: 100%;
-    padding-bottom: env(safe-area-inset-bottom);
-    height: calc(
-      100% - env(safe-area-inset-bottom) - max(1rem, env(safe-area-inset-top)) -
-        2.5rem
-    );
+    height: calc(100% - max(1rem, env(safe-area-inset-top)) - 3rem);
 
     &::-webkit-scrollbar {
       display: none;
