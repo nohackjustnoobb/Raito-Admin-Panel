@@ -9,7 +9,7 @@
     mdiPlus,
     mdiBookEdit,
   } from "@mdi/js";
-  import { getContext, tick } from "svelte";
+  import { getContext } from "svelte";
 
   import Image from "../components/Image.svelte";
   import TopBar from "../components/TopBar.svelte";
@@ -52,6 +52,7 @@
   let orderedChapters: Array<Chapter>;
 
   $: mangaInfo = {
+    ID: [manga.id],
     title: [manga.title],
     latest: [manga.latest],
     status: [manga.isEnded ? "ended" : "onGoing"],
@@ -331,6 +332,7 @@
     .thumbnail {
       flex: 1;
       position: relative;
+      height: 100%;
 
       .edit {
         position: absolute;
@@ -380,6 +382,7 @@
     span {
       opacity: 0.8;
       user-select: all;
+      white-space: pre-line;
     }
   }
 
