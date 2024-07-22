@@ -18,8 +18,8 @@
   </ul>
   <div
     class="hover"
-    style:width={`calc(${100 / segments.length}% - ${index == segments.length - 1 ? "0.25" : "0"}rem)`}
-    style:left={`calc(${(100 / segments.length) * index}% + ${index == 0 ? "0.25" : "0"}rem)`}
+    style:width={`calc(${100 / segments.length}% - ${index === segments.length - 1 ? "0.25" : "0"}rem)`}
+    style:left={`calc(${(100 / segments.length) * index}% + ${index === 0 ? "0.25" : "0"}rem)`}
   />
 </div>
 

@@ -383,7 +383,7 @@
 
     span {
       opacity: 0.8;
-      user-select: all;
+      user-select: text;
       white-space: pre-line;
       overflow-x: scroll;
 

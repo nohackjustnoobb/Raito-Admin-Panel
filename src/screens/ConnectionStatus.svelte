@@ -8,7 +8,7 @@
   import Stackable from "./Stackable.svelte";
   import Button from "../components/Button.svelte";
   import { connection } from "../lib/connection";
-  import { wheelToScrollHorizontally } from "../lib/utils";
+  import { convertRemToPixels, wheelToScrollHorizontally } from "../lib/utils";
 
   const { pop } = getContext("stack") as any;
 
@@ -23,14 +23,22 @@
     <h3>{$_("connection")}</h3>
     <div class="info">
       <span>
-        <SvgIcon type="mdi" path={mdiServerNetwork} size="1.25rem" />
+        <SvgIcon
+          type="mdi"
+          path={mdiServerNetwork}
+          size={convertRemToPixels(1.25)}
+        />
         {$_("serverUrl")}:
       </span>
       <b on:mousewheel={wheelToScrollHorizontally("B")}>{connection.url}</b>
     </div>
     <div class="info">
       <span>
-        <SvgIcon type="mdi" path={mdiKeyChain} size="1.25rem" />
+        <SvgIcon
+          type="mdi"
+          path={mdiKeyChain}
+          size={convertRemToPixels(1.25)}
+        />
         {$_("accessKey")}:
       </span>
       <b on:mousewheel={wheelToScrollHorizontally("B")}>

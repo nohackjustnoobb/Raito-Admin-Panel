@@ -97,7 +97,7 @@
         v[1] > mouseYCoordinate! + scrollTop
     );
 
-    if (index === -1 || draggingChapter.id == list[index].id) return;
+    if (index === -1 || draggingChapter.id === list[index].id) return;
 
     list = list
       .filter((v) => v.id !== draggingChapter!.id)
