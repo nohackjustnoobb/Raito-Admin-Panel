@@ -10,7 +10,7 @@
   import SetConnection from "./SetConnection.svelte";
   import Stackable from "./Stackable.svelte";
   import ConnectionStatus from "./ConnectionStatus.svelte";
-  import { categories, list, manga, Manga, Status } from "../lib/manga";
+  import { genres, list, manga, Manga, Status } from "../lib/manga";
   import { convertRemToPixels, wheelToScrollHorizontally } from "../lib/utils";
   import Button from "../components/Button.svelte";
   import CreateOrUpdateManga from "./CreateOrUpdateManga.svelte";
@@ -133,7 +133,7 @@
         <div>
           <b>{$_("genre")}: </b>
           <ul on:mousewheel={wheelToScrollHorizontally("UL")}>
-            {#each categories as category}
+            {#each genres as category}
               <li
                 class:selected={category === selectedCategory}
                 on:click={() => {

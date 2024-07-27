@@ -2,10 +2,10 @@ import { get, writable } from "svelte/store";
 
 import { connected, connection } from "./connection";
 
-const categories = [
+const genres = [
   "All",
-  "Passionate",
-  "Love",
+  "HotBlooded",
+  "Romance",
   "Campus",
   "Yuri",
   "Otokonoko",
@@ -21,7 +21,7 @@ const categories = [
   "Magic",
   "Horror",
   "Ghosts",
-  "History",
+  "Historical",
   "FanFi",
   "Sports",
   "Hentai",
@@ -181,9 +181,9 @@ class DetailsManga extends Manga {
    */
   description: string;
   /**
-   * The categories of the manga.
+   * The genres of the manga.
    */
-  categories: Array<string>;
+  genres: Array<string>;
   /**
    * All the chapters that the manga has.
    */
@@ -208,7 +208,7 @@ class DetailsManga extends Manga {
 
     this.authors = data.authors;
     this.description = data.description;
-    this.categories = data.categories;
+    this.genres = data.genres;
     this.chapters = data.chapters;
     this.latest =
       data.latest ??
@@ -221,7 +221,7 @@ class DetailsManga extends Manga {
   toJson() {
     return {
       authors: this.authors,
-      categories: this.categories,
+      genres: this.genres,
       chapters: this.chapters,
       description: this.description,
       id: this.id,
@@ -271,7 +271,7 @@ class DetailsManga extends Manga {
         if (create) {
           const listValue = get(list);
 
-          for (const category of ["All", ...this.categories]) {
+          for (const category of ["All", ...this.genres]) {
             // update Any + category
             const anyCategory = listValue[Status.Any + category];
             if (anyCategory && anyCategory[1]) {
@@ -382,7 +382,7 @@ class DetailsManga extends Manga {
     description: string,
     isEnded: boolean,
     authors: Array<string>,
-    categories: Array<string>
+    genres: Array<string>
   ): Promise<boolean> {
     const data: any = {};
 
@@ -391,7 +391,7 @@ class DetailsManga extends Manga {
     data.description = description;
     data.isEnded = isEnded;
     data.authors = authors;
-    data.categories = categories;
+    data.genres = genres;
 
     // Placeholder
     data.id = "";
@@ -409,13 +409,13 @@ class DetailsManga extends Manga {
     description: string,
     isEnded: boolean,
     authors: Array<string>,
-    categories: Array<string>
+    genres: Array<string>
   ): Promise<boolean> {
     this.title = title;
     this.description = description;
     this.isEnded = isEnded;
     this.authors = authors;
-    this.categories = categories;
+    this.genres = genres;
 
     return await this.upload();
   }
@@ -456,7 +456,7 @@ class DetailsManga extends Manga {
       if (resp.ok) {
         const listValue = get(list);
 
-        for (const category of ["All", ...this.categories]) {
+        for (const category of ["All", ...this.genres]) {
           // update Any + category
           const anyCategory = listValue[Status.Any + category];
           if (anyCategory) {
@@ -526,5 +526,5 @@ class DetailsManga extends Manga {
   }
 }
 
-export { categories, DetailsManga, list, manga, Manga, Status };
+export { DetailsManga, genres, list, manga, Manga, Status };
 export type { Chapter, Chapters };

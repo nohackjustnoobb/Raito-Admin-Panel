@@ -26,7 +26,7 @@ class Connection {
 
       if (resp.ok) {
         const json = await resp.json();
-        if (!json.supportedCategories) return false;
+        if (!json.supportedGenres) return false;
 
         this.version = json.version;
 

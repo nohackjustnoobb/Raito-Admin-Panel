@@ -57,7 +57,7 @@
     latest: [manga.latest],
     status: [manga.isEnded ? "ended" : "onGoing"],
     authors: manga.authors,
-    genre: manga.categories,
+    genre: manga.genres,
   };
   $: chapters = manga.chapters[isExtra ? "extra" : "serial"];
   $: orderedChapters = isDescending ? chapters : chapters.toReversed();

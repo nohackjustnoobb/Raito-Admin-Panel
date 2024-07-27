@@ -6,7 +6,7 @@
   import { mdiClose, mdiPlus } from "@mdi/js";
 
   import Stackable from "./Stackable.svelte";
-  import { DetailsManga, categories as categoriesList } from "../lib/manga";
+  import { DetailsManga, genres as genresList } from "../lib/manga";
   import Input from "../components/Input.svelte";
   import { convertRemToPixels } from "../lib/utils";
   import Button from "../components/Button.svelte";
@@ -21,7 +21,7 @@
   let description: string = manga?.description || "";
   let isEnded: boolean = manga?.isEnded || false;
   let authors: Array<string> = manga?.authors || [];
-  let categories: Array<string> = manga?.categories || [];
+  let genres: Array<string> = manga?.genres || [];
 
   let selected: number = 0;
   let value: string = "";
@@ -39,11 +39,8 @@
     <div>
       <span>{$_("genre")}: </span>
       <ul>
-        {#each categories as category}
-          <li
-            on:click={() =>
-              (categories = categories.filter((v) => v !== category))}
-          >
+        {#each genres as category}
+          <li on:click={() => (genres = genres.filter((v) => v !== category))}>
             {$_(category)}
             <SvgIcon
               type="mdi"
@@ -64,15 +61,15 @@
             bind:value={selected}
             on:change={() => {
               if (Number(selected) !== 0)
-                categories = [...categories, categoriesList[selected]];
+                genres = [...genres, genresList[selected]];
               selected = 0;
             }}
           >
             <option value="0">
               {$_("selectGenre")}:
             </option>
-            {#each categoriesList.slice(1) as category, idx}
-              {#if !categories.includes(category)}
+            {#each genresList.slice(1) as category, idx}
+              {#if !genres.includes(category)}
                 <option value={idx + 1}>
                   {$_(category)}
                 </option>
@@ -121,19 +118,13 @@
         on:click={async () => {
           push(FullScreenLoader);
           const result = manga
-            ? await manga.update(
-                title,
-                description,
-                isEnded,
-                authors,
-                categories
-              )
+            ? await manga.update(title, description, isEnded, authors, genres)
             : await DetailsManga.create(
                 title,
                 description,
                 isEnded,
                 authors,
-                categories
+                genres
               );
           pop();
 
