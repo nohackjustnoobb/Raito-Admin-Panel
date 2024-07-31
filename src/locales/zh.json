@@ -85,5 +85,13 @@
     "darkTheme": "深色模式",
     "auto": "自動",
     "dark": "深色",
-    "light": "淺色"
+    "light": "淺色",
+    "edit": "編輯",
+    "createToken": "創建Token",
+    "failedToCreateTheToken": "創建Token失敗",
+    "noMatchingToken": "沒有匹配的Token",
+    "refreshTokenConfirmation": "確認更新此Token？",
+    "failedToRefreshTheToken": "更新Token失敗",
+    "deleteTokenConfirmation": "確認刪除此Token？",
+    "failedToDeleteTheToken": "刪除Token失敗"
 }

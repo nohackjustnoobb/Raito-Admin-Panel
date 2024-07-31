@@ -102,7 +102,6 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 <Swipeable {zIndex}>
   <div class="container" style:flex-direction={isVertical ? "column" : "row"}>
     <div class="left" style:width={isVertical ? "" : "400px"}>
@@ -324,6 +323,7 @@
 
     span {
       cursor: pointer;
+      display: flex;
     }
   }
 

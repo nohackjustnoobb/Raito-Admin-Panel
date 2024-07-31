@@ -1,6 +1,6 @@
 <script lang="ts">
   import SvgIcon from "@jamescoyle/svelte-icon";
-  import { mdiCog, mdiMagnify, mdiPlus } from "@mdi/js";
+  import { mdiCog, mdiMagnify, mdiShieldEdit } from "@mdi/js";
   import { _ } from "svelte-i18n";
   import { Circle } from "svelte-loading-spinners";
   import { getContext, onDestroy } from "svelte";
@@ -13,10 +13,10 @@
   import { genres, list, manga, Manga, Status } from "../lib/manga";
   import { convertRemToPixels, wheelToScrollHorizontally } from "../lib/utils";
   import Button from "../components/Button.svelte";
-  import CreateOrUpdateManga from "./CreateOrUpdateManga.svelte";
   import MangasList from "../components/MangasList.svelte";
   import Search from "./Search.svelte";
   import Settings from "./Settings.svelte";
+  import TokenManager from "./TokenManager.svelte";
 
   let selectedCategory: string = "All";
   let selectedStatus: Status = Status.Any;
@@ -117,8 +117,12 @@
         </div>
       </div>
       <div class="rightItems">
-        <span on:click={() => push(CreateOrUpdateManga)}>
-          <SvgIcon type="mdi" path={mdiPlus} size={convertRemToPixels(2.25)} />
+        <span on:click={() => push(TokenManager)}>
+          <SvgIcon
+            type="mdi"
+            path={mdiShieldEdit}
+            size={convertRemToPixels(2)}
+          />
         </span>
         <span on:click={() => push(Search)}>
           <SvgIcon type="mdi" path={mdiMagnify} size={convertRemToPixels(2)} />
@@ -164,14 +168,10 @@
         </div>
       </div>
       <div class="mangas">
-        <MangasList {mangas} />
+        <MangasList {mangas} showCreate />
         {#if isLoading}
           <div class="loader">
             <Circle color="var(--color-chapters-text)" unit="rem" size="3" />
-          </div>
-        {:else if !mangas.length}
-          <div class="noMatching">
-            <h3>{$_("noMatchingManga")}</h3>
           </div>
         {:else if !isReached}
           <div class="loadMore">
@@ -321,16 +321,6 @@
       display: flex;
       justify-content: center;
       margin: 1rem;
-    }
-
-    .noMatching {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      transform: translateY(-3rem);
-      justify-content: center;
-      align-items: center;
-      opacity: 0.5;
     }
   }
 </style>

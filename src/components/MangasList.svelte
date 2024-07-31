@@ -1,4 +1,6 @@
 <script lang="ts">
+  import SvgIcon from "@jamescoyle/svelte-icon";
+  import { mdiPlus } from "@mdi/js";
   import { getContext } from "svelte";
   import { _ } from "svelte-i18n";
 
@@ -6,15 +8,23 @@
   import FullScreenLoader from "../screens/FullScreenLoader.svelte";
   import Details from "../screens/Details.svelte";
   import Image from "./Image.svelte";
+  import CreateOrUpdateManga from "../screens/CreateOrUpdateManga.svelte";
+  import { convertRemToPixels } from "../lib/utils";
 
   const { push, pop } = getContext("stack") as any;
 
   export let mangas: Array<Manga>;
+  export let showCreate: boolean = false;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <ul>
+  {#if showCreate}
+    <li class="create" on:click={() => push(CreateOrUpdateManga)}>
+      <SvgIcon type="mdi" path={mdiPlus} size={convertRemToPixels(4)} />
+    </li>
+  {/if}
   {#each mangas as manga (manga.id)}
     <li
       on:click={async () => {
@@ -52,6 +62,15 @@
     li {
       position: relative;
       cursor: pointer;
+
+      &.create {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--color-sub-background);
+        border-radius: 0.5rem;
+        padding: 1rem;
+      }
 
       span {
         position: absolute;
