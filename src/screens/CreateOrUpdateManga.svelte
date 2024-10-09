@@ -6,7 +6,7 @@
   import { mdiClose, mdiPlus } from "@mdi/js";
 
   import Stackable from "./Stackable.svelte";
-  import { DetailsManga, genres as genresList } from "../lib/manga";
+  import { DetailsManga, GENRES as genresList } from "../lib/manga";
   import Input from "../components/Input.svelte";
   import { convertRemToPixels } from "../lib/utils";
   import Button from "../components/Button.svelte";

@@ -2,31 +2,30 @@ import { get, writable } from "svelte/store";
 
 import { connected, connection } from "./connection";
 
-const genres = [
-  "All",
-  "HotBlooded",
-  "Romance",
-  "Campus",
-  "Yuri",
-  "Otokonoko",
+const GENRES = [
+  "all",
+  "hotBlooded",
+  "romance",
+  "campus",
+  "yuri",
+  "otokonoko",
   "BL",
-  "Adventure",
-  "Harem",
-  "SciFi",
-  "War",
-  "Suspense",
-  "Speculation",
-  "Funny",
-  "Fantasy",
-  "Magic",
-  "Horror",
-  "Ghosts",
-  "Historical",
-  "FanFi",
-  "Sports",
-  "Hentai",
-  "Mecha",
-  "Restricted",
+  "adventure",
+  "harem",
+  "sciFi",
+  "war",
+  "suspense",
+  "speculation",
+  "funny",
+  "fantasy",
+  "magic",
+  "horror",
+  "ghosts",
+  "historical",
+  "fanFi",
+  "sports",
+  "mecha",
+  "restricted",
 ];
 
 enum Status {
@@ -75,7 +74,7 @@ class Manga {
   }
 
   static async getList(
-    category: string = "All",
+    category: string = "all",
     status: Status = Status.Any,
     page: number = 1,
     useCache: boolean = true
@@ -97,7 +96,7 @@ class Manga {
     if (cached && cached[page] && useCache) return true;
 
     const result = await connection.get("list", {
-      ...(category !== "All" && { category: category }),
+      ...(category !== "all" && { category: category }),
       status: String(status),
       page: String(page),
     });
@@ -271,7 +270,7 @@ class DetailsManga extends Manga {
         if (create) {
           const listValue = get(list);
 
-          for (const category of ["All", ...this.genres]) {
+          for (const category of ["all", ...this.genres]) {
             // update Any + category
             const anyCategory = listValue[Status.Any + category];
             if (anyCategory && anyCategory[1]) {
@@ -456,7 +455,7 @@ class DetailsManga extends Manga {
       if (resp.ok) {
         const listValue = get(list);
 
-        for (const category of ["All", ...this.genres]) {
+        for (const category of ["all", ...this.genres]) {
           // update Any + category
           const anyCategory = listValue[Status.Any + category];
           if (anyCategory) {
@@ -526,5 +525,5 @@ class DetailsManga extends Manga {
   }
 }
 
-export { DetailsManga, genres, list, manga, Manga, Status };
+export { DetailsManga, GENRES, list, manga, Manga, Status };
 export type { Chapter, Chapters };
