@@ -347,7 +347,7 @@ class DetailsManga extends Manga {
     if (!get(connected)) return false;
 
     try {
-      const resp = await connection.put("chapters/edit", {}, chapters);
+      const resp = await connection.put("chapter/edit", {}, chapters);
 
       if (resp.ok) this.chapters = await resp.json();
 
@@ -428,7 +428,7 @@ class DetailsManga extends Manga {
         title: title,
         isExtra: isExtra,
       };
-      const resp = await connection.post("chapters/edit", {}, body);
+      const resp = await connection.post("chapter/edit", {}, body);
 
       // update the chapters
       if (resp.ok) {
@@ -494,7 +494,7 @@ class DetailsManga extends Manga {
     if (!get(connected)) return false;
 
     try {
-      const resp = await connection.delete("chapters/edit", {
+      const resp = await connection.delete("chapter/edit", {
         id: id,
         "extra-data": this.chapters.extraData,
       });
