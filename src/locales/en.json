@@ -92,5 +92,9 @@
     "refreshTokenConfirmation": "Are you sure you want to refresh this token?",
     "failedToRefreshTheToken": "Failed to fresh the token.",
     "deleteTokenConfirmation": "Are you sure you want to delete this token?",
-    "failedToDeleteTheToken": "Failed to delete the token."
+    "failedToDeleteTheToken": "Failed to delete the token.",
+    "exportMangaConfirmation": "Are you sure you want to export this manga?",
+    "failedToExportTheManga": "Failed to export the manga.",
+    "failedToUploadTheManga": "Failed to upload the manga.",
+    "failedToUploadTheChapter": "Failed to upload the chapter."
 }

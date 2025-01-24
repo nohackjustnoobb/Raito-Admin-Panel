@@ -92,5 +92,9 @@
     "refreshTokenConfirmation": "確認更新此Token？",
     "failedToRefreshTheToken": "更新Token失敗",
     "deleteTokenConfirmation": "確認刪除此Token？",
-    "failedToDeleteTheToken": "刪除Token失敗"
+    "failedToDeleteTheToken": "刪除Token失敗",
+    "exportMangaConfirmation": "確定匯出這本漫畫嗎？",
+    "failedToExportTheManga": "匯出漫畫失敗",
+    "failedToUploadTheManga": "上傳漫畫失敗",
+    "failedToUploadTheChapter": "上傳章節失敗"
 }

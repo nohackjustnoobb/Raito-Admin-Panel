@@ -149,6 +149,53 @@ class Manga {
     return (await result.json()).map((v: any) => new Manga(v));
   }
 
+  async download(): Promise<boolean> {
+    if (!get(connected)) return false;
+
+    try {
+      const result = await connection.get("manga/download", {
+        id: this.id,
+      });
+
+      if (!result.ok) return false;
+
+      const blob = await result.blob();
+
+      const objectUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = objectUrl;
+      a.download = `${this.title}.raito.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      URL.revokeObjectURL(objectUrl);
+    } catch {
+      return false;
+    }
+
+    return true;
+  }
+
+  static async upload(file: File): Promise<boolean> {
+    if (!get(connected)) return false;
+
+    try {
+      const resp = await connection.post("manga/upload", {}, file);
+
+      if (!resp.ok) return false;
+
+      const manga = new DetailsManga(await resp.json());
+      manga.updateManga();
+      manga.uploadList();
+    } catch {
+      return false;
+    }
+
+    return true;
+  }
+
   async toDetails(): Promise<DetailsManga> {
     if (!get(connected)) throw "Not connected";
 
@@ -247,6 +294,36 @@ class DetailsManga extends Manga {
     return [];
   }
 
+  uploadList() {
+    const listValue = get(list);
+
+    for (const category of ["all", ...this.genres]) {
+      // update Any + category
+      const anyCategory = listValue[Status.Any + category];
+      if (anyCategory && anyCategory[1]) {
+        anyCategory[1].unshift(this.id);
+        listValue[Status.Any + category] = anyCategory;
+      }
+
+      // update Ended/OnGoing + category
+      const filteredCategory =
+        listValue[this.isEnded ? Status.Ended : Status.OnGoing + category];
+      if (filteredCategory && filteredCategory[1]) {
+        filteredCategory[1].unshift(this.id);
+        listValue[this.isEnded ? Status.Ended : Status.OnGoing + category] =
+          filteredCategory;
+      }
+    }
+
+    list.set(listValue);
+  }
+
+  updateManga() {
+    const mangaValue = get(manga);
+    mangaValue[this.id] = this;
+    manga.set(mangaValue);
+  }
+
   async upload(create: boolean = false): Promise<boolean> {
     if (!get(connected)) return false;
 
@@ -263,36 +340,9 @@ class DetailsManga extends Manga {
         this.chapters = json.chapters;
         if (json.updateTime) this.updateTime = new Date(json.updateTime * 1000);
 
-        const mangaValue = get(manga);
-        mangaValue[this.id] = this;
-        manga.set(mangaValue);
+        this.updateManga();
 
-        if (create) {
-          const listValue = get(list);
-
-          for (const category of ["all", ...this.genres]) {
-            // update Any + category
-            const anyCategory = listValue[Status.Any + category];
-            if (anyCategory && anyCategory[1]) {
-              anyCategory[1].unshift(this.id);
-              listValue[Status.Any + category] = anyCategory;
-            }
-
-            // update Ended/OnGoing + category
-            const filteredCategory =
-              listValue[
-                this.isEnded ? Status.Ended : Status.OnGoing + category
-              ];
-            if (filteredCategory && filteredCategory[1]) {
-              filteredCategory[1].unshift(this.id);
-              listValue[
-                this.isEnded ? Status.Ended : Status.OnGoing + category
-              ] = filteredCategory;
-            }
-          }
-
-          list.set(listValue);
-        }
+        if (create) this.uploadList();
       }
 
       return resp.ok;
@@ -376,6 +426,36 @@ class DetailsManga extends Manga {
     return false;
   }
 
+  async uploadChapterWithCBZ(isExtra: boolean, file: File) {
+    if (!get(connected)) return false;
+
+    const title = file.name.match(/(.*)\.cbz/)![1];
+
+    try {
+      const resp = await connection.post(
+        "chapter/upload",
+        {
+          "extra-data": this.chapters.extraData,
+          "is-extra": isExtra ? "1" : "0",
+          title: title,
+        },
+        file
+      );
+
+      // update the chapters
+      if (!resp.ok) return false;
+
+      this.chapters = await resp.json();
+      this.latest = title;
+
+      this.updateManga();
+    } catch {
+      return false;
+    }
+
+    return true;
+  }
+
   static async create(
     title: string,
     description: string,
@@ -431,19 +511,17 @@ class DetailsManga extends Manga {
       const resp = await connection.post("chapter/edit", {}, body);
 
       // update the chapters
-      if (resp.ok) {
-        this.chapters = await resp.json();
-        this.latest = title;
+      if (!resp.ok) return false;
 
-        const mangaValue = get(manga);
-        if (mangaValue[this.id]) mangaValue[this.id].latest = title;
-        manga.set(mangaValue);
-      }
+      this.chapters = await resp.json();
+      this.latest = title;
 
-      return resp.ok;
-    } catch (e) {}
+      this.updateManga();
+    } catch (e) {
+      return false;
+    }
 
-    return false;
+    return true;
   }
 
   async delete(): Promise<boolean> {

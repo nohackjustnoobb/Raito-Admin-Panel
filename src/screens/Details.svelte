@@ -8,12 +8,15 @@
     mdiOrderNumericDescending,
     mdiPlus,
     mdiBookEdit,
+    mdiExport,
+    mdiIceCream,
+    mdiImport,
   } from "@mdi/js";
   import { getContext } from "svelte";
 
   import Image from "../components/Image.svelte";
   import TopBar from "../components/TopBar.svelte";
-  import type { Chapter, DetailsManga } from "../lib/manga";
+  import { DetailsManga, type Chapter } from "../lib/manga";
   import Swipeable from "./Swipeable.svelte";
   import CreateOrUpdateManga from "./CreateOrUpdateManga.svelte";
   import { convertRemToPixels, sleep } from "../lib/utils";
@@ -50,6 +53,9 @@
   let mangaInfo: { [title: string]: Array<string> } = {};
   let chapters: Array<Chapter>;
   let orderedChapters: Array<Chapter>;
+
+  // input
+  let chapterInput: HTMLInputElement;
 
   $: mangaInfo = {
     ID: [manga.id],
@@ -97,6 +103,23 @@
     rightScreen = component;
     rightProps = props;
   }
+
+  async function uploadChapter(event: InputEvent) {
+    const target = event.target;
+    if (target) {
+      const files = (target as HTMLInputElement).files;
+      if (files?.length) {
+        push(FullScreenLoader);
+
+        const result = await manga.uploadChapterWithCBZ(isExtra == 1, files[0]);
+
+        pop();
+        (target as HTMLInputElement).value = "";
+
+        if (!result) alert($_("failedToUploadTheChapter"));
+      }
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -107,6 +130,23 @@
     <div class="left" style:width={isVertical ? "" : "400px"}>
       <TopBar>
         <div slot="right" class="actions">
+          <span
+            on:click={async () => {
+              if (!confirm($_("exportMangaConfirmation"))) return;
+
+              push(FullScreenLoader);
+              const result = await manga.download();
+              pop();
+
+              if (!result) alert($_("failedToDeleteManga"));
+            }}
+          >
+            <SvgIcon
+              type="mdi"
+              path={mdiExport}
+              size={convertRemToPixels(1.5)}
+            />
+          </span>
           <span on:click={() => push(CreateOrUpdateManga, { manga })}>
             <SvgIcon
               type="mdi"
@@ -116,14 +156,14 @@
           </span>
           <span
             on:click={async () => {
-              if (confirm($_("deleteMangaConfirmation"))) {
-                push(FullScreenLoader);
-                const result = await manga.delete();
-                pop();
+              if (!confirm($_("deleteMangaConfirmation"))) return;
 
-                if (result) pop();
-                else alert($_("failedToDeleteManga"));
-              }
+              push(FullScreenLoader);
+              const result = await manga.delete();
+              pop();
+
+              if (result) pop();
+              else alert($_("failedToDeleteManga"));
             }}
           >
             <SvgIcon
@@ -208,8 +248,30 @@
         </div>
 
         <ul class="chapters">
-          <li on:click={() => push(CreateChapter, { manga })}>
-            <SvgIcon type="mdi" path={mdiPlus} size={convertRemToPixels(1.5)} />
+          <li class="create">
+            <span
+              on:click={() =>
+                push(CreateChapter, { manga, isExtra: isExtra == 1 })}
+            >
+              <SvgIcon
+                type="mdi"
+                path={mdiPlus}
+                size={convertRemToPixels(1.5)}
+              />
+            </span>
+            <span on:click={() => chapterInput.click()}>
+              <input
+                type="file"
+                on:change={uploadChapter}
+                accept=".cbz"
+                bind:this={chapterInput}
+              />
+              <SvgIcon
+                type="mdi"
+                path={mdiImport}
+                size={convertRemToPixels(1.5)}
+              />
+            </span>
           </li>
           {#each orderedChapters as chapter (chapter.id)}
             <li
@@ -427,6 +489,29 @@
       font-size: 1rem;
       text-align: center;
       height: 1.5rem;
+
+      &.create {
+        background-color: initial;
+        gap: 0.5rem;
+        padding: 0;
+        height: 2rem;
+
+        span {
+          flex: 1;
+          display: flex;
+          height: 100%;
+          border-radius: 0.5rem;
+          justify-content: center;
+          align-items: center;
+          background-color: var(--color-chapters-background);
+
+          input {
+            opacity: 0;
+            position: absolute;
+            z-index: -1;
+          }
+        }
+      }
 
       p {
         margin: 0;

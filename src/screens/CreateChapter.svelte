@@ -13,8 +13,8 @@
   const { pop, push } = getContext("stack") as any;
 
   let title: string = "";
-  let isExtra: boolean = false;
 
+  export let isExtra: boolean = false;
   export let manga: DetailsManga;
   export let zIndex: number;
 </script>

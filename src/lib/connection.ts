@@ -158,7 +158,11 @@ class Connection {
     let parsedBody = body;
     let parsedHeaders = headers;
 
-    if (parsedBody && !(typeof parsedBody === "string")) {
+    if (
+      parsedBody &&
+      !(typeof parsedBody === "string") &&
+      !(parsedBody instanceof File)
+    ) {
       parsedBody = JSON.stringify(parsedBody);
       parsedHeaders["Content-Type"] = "application/json";
     }
